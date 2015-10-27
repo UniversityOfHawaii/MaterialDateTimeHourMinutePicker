@@ -1,1 +1,1 @@
-See https://github.com/wdullaer/MaterialDateTimePickerfor base documentation.
+See https://github.com/wdullaer/MaterialDateTimePicker for base documentation.
