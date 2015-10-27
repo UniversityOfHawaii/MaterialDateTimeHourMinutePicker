@@ -36,7 +36,6 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.FrameLayout;
 
 import com.wdullaer.materialdatetimepicker.R;
 
@@ -47,7 +46,7 @@ import java.util.Calendar;
  * itself to end up as a square. It also handles touches to be passed in to views that need to know
  * when they'd been touched.
  */
-public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
+public class RadialPickerLayout extends PickerLayout implements OnTouchListener {
     private static final String TAG = "RadialPickerLayout";
 
     private final int TOUCH_SLOP;
@@ -56,22 +55,13 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     private static final int VISIBLE_DEGREES_STEP_SIZE = 30;
     private static final int HOUR_VALUE_TO_DEGREES_STEP_SIZE = VISIBLE_DEGREES_STEP_SIZE;
     private static final int MINUTE_VALUE_TO_DEGREES_STEP_SIZE = 6;
-    private static final int HOUR_INDEX = TimePickerDialog.HOUR_INDEX;
-    private static final int MINUTE_INDEX = TimePickerDialog.MINUTE_INDEX;
-    private static final int AMPM_INDEX = TimePickerDialog.AMPM_INDEX;
     private static final int ENABLE_PICKER_INDEX = TimePickerDialog.ENABLE_PICKER_INDEX;
-    private static final int AM = TimePickerDialog.AM;
-    private static final int PM = TimePickerDialog.PM;
 
     private int mLastValueSelected;
 
     private TimePickerController mController;
     private OnValueSelectedListener mListener;
     private boolean mTimeInitialized;
-    private int mCurrentHoursOfDay;
-    private int mCurrentMinutes;
-    private boolean mIs24HourMode;
-    private int mCurrentItemShowing;
 
     private CircleView mCircleView;
     private AmPmCirclesView mAmPmCirclesView;
@@ -93,10 +83,6 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
 
     private AnimatorSet mTransition;
     private Handler mHandler = new Handler();
-
-    public interface OnValueSelectedListener {
-        void onValueSelected(int pickerIndex, int newValue, boolean autoAdvance);
-    }
 
     public RadialPickerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -159,6 +145,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     }
     **/
 
+    @Override
     public void setOnValueSelectedListener(OnValueSelectedListener listener) {
         mListener = listener;
     }
@@ -170,6 +157,7 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
      * @param initialMinutes
      * @param is24HourMode
      */
+    @Override
     public void initialize(Context context, TimePickerDialog timePickerDialog,
             int initialHoursOfDay, int initialMinutes, boolean is24HourMode) {
         if (mTimeInitialized) {
@@ -258,14 +246,6 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
         return mIs24HourMode && (hourOfDay <= 12 && hourOfDay != 0);
     }
 
-    public int getHours() {
-        return mCurrentHoursOfDay;
-    }
-
-    public int getMinutes() {
-        return mCurrentMinutes;
-    }
-
     /**
      * If the hours are showing, return the current hour. If the minutes are showing, return the
      * current minute.
@@ -273,37 +253,11 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     private int getCurrentlyShowingValue() {
         int currentIndex = getCurrentItemShowing();
         if (currentIndex == HOUR_INDEX) {
-            return mCurrentHoursOfDay;
+            return getHours();
         } else if (currentIndex == MINUTE_INDEX) {
-            return mCurrentMinutes;
+            return getMinutes();
         } else {
             return -1;
-        }
-    }
-
-    public int getIsCurrentlyAmOrPm() {
-        if (mCurrentHoursOfDay < 12) {
-            return AM;
-        } else if (mCurrentHoursOfDay < 24) {
-            return PM;
-        }
-        return -1;
-    }
-
-    /**
-     * Set the internal value for the hour, minute, or AM/PM.
-     */
-    private void setValueForItem(int index, int value) {
-        if (index == HOUR_INDEX) {
-            mCurrentHoursOfDay = value;
-        } else if (index == MINUTE_INDEX){
-            mCurrentMinutes = value;
-        } else if (index == AMPM_INDEX) {
-            if (value == AM) {
-                mCurrentHoursOfDay = mCurrentHoursOfDay % 12;
-            } else if (value == PM) {
-                mCurrentHoursOfDay = (mCurrentHoursOfDay % 12) + 12;
-            }
         }
     }
 
@@ -311,10 +265,11 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
      * Set the internal value as either AM or PM, and update the AM/PM circle displays.
      * @param amOrPm
      */
+    @Override
     public void setAmOrPm(int amOrPm) {
+        super.setAmOrPm(amOrPm);
         mAmPmCirclesView.setAmOrPm(amOrPm);
         mAmPmCirclesView.invalidate();
-        setValueForItem(AMPM_INDEX, amOrPm);
     }
 
     /**
@@ -516,28 +471,13 @@ public class RadialPickerLayout extends FrameLayout implements OnTouchListener {
     }
 
     /**
-     * Get the item (hours or minutes) that is currently showing.
-     */
-    public int getCurrentItemShowing() {
-        if (mCurrentItemShowing != HOUR_INDEX && mCurrentItemShowing != MINUTE_INDEX) {
-            Log.e(TAG, "Current item showing was unfortunately set to "+mCurrentItemShowing);
-            return -1;
-        }
-        return mCurrentItemShowing;
-    }
-
-    /**
      * Set either minutes or hours as showing.
      * @param animate True to animate the transition, false to show with no animation.
      */
+    @Override
     public void setCurrentItemShowing(int index, boolean animate) {
-        if (index != HOUR_INDEX && index != MINUTE_INDEX) {
-            Log.e(TAG, "TimePicker does not support view at index "+index);
-            return;
-        }
-
         int lastIndex = getCurrentItemShowing();
-        mCurrentItemShowing = index;
+        super.setCurrentItemShowing(index, animate);
 
         if (animate && (index != lastIndex)) {
             ObjectAnimator[] anims = new ObjectAnimator[4];

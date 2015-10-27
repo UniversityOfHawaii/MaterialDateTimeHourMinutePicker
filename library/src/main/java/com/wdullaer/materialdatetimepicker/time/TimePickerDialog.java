@@ -40,7 +40,7 @@ import com.wdullaer.materialdatetimepicker.HapticFeedbackController;
 import com.wdullaer.materialdatetimepicker.R;
 import com.wdullaer.materialdatetimepicker.TypefaceHelper;
 import com.wdullaer.materialdatetimepicker.Utils;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout.OnValueSelectedListener;
+import com.wdullaer.materialdatetimepicker.time.PickerLayout.OnValueSelectedListener;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class TimePickerDialog extends DialogFragment implements
     private TextView mMinuteSpaceView;
     private TextView mAmPmTextView;
     private View mAmPmHitspace;
-    private RadialPickerLayout mTimePicker;
+    private PickerLayout mTimePicker;
 
     private int mSelectedColor;
     private int mUnselectedColor;
@@ -135,7 +135,7 @@ public class TimePickerDialog extends DialogFragment implements
          * @param hourOfDay The hour that was set.
          * @param minute The minute that was set.
          */
-        void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute);
+        void onTimeSet(PickerLayout view, int hourOfDay, int minute);
     }
 
     public TimePickerDialog() {
@@ -296,7 +296,7 @@ public class TimePickerDialog extends DialogFragment implements
 
         mHapticFeedbackController = new HapticFeedbackController(getActivity());
 
-        mTimePicker = (RadialPickerLayout) view.findViewById(R.id.time_picker);
+        mTimePicker = (PickerLayout) view.findViewById(R.id.time_picker);
         mTimePicker.setOnValueSelectedListener(this);
         mTimePicker.setOnKeyListener(keyboardListener);
         mTimePicker.initialize(getActivity(), this, mInitialHourOfDay,
