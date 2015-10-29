@@ -75,10 +75,12 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
+                int initialHour = 4;
+                int initialMinutes = 0;
                 HourMinutePickerDialog hmpd = HourMinutePickerDialog.newInstance(
                         MainActivity.this,
-                        now.get(Calendar.HOUR_OF_DAY),
-                        now.get(Calendar.MINUTE)
+                        initialHour,
+                        initialMinutes
                 );
                 hmpd.setThemeDark(modeDarkHourMinute.isChecked());
                 hmpd.vibrate(vibrateHourMinute.isChecked());

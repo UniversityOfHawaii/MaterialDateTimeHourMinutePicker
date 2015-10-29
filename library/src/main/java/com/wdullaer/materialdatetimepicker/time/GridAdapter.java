@@ -60,10 +60,11 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         }
     }
 
-    public GridAdapter(Drawable pressedDrawable, Drawable selectedDrawable, int[] dataSet, OnItemClickListener onItemClickListener) {
+    public GridAdapter(Drawable pressedDrawable, Drawable selectedDrawable, int[] dataSet, int initialSelection, OnItemClickListener onItemClickListener) {
         this.pressedDrawable = pressedDrawable;
         this.selectedDrawable = selectedDrawable;
         this.mDataSet = dataSet;
+        this.selectedPosition = initialSelection;
         this.mOnItemClickListener = onItemClickListener;
     }
 

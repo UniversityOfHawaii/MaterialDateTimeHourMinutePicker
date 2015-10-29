@@ -34,7 +34,7 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
     }
 
     @Override
-    public void initialize(Context context, TimePickerDialog timePickerDialog, int initialHoursOfDay, int initialMinutes, boolean is24HourMode) {
+    public void initialize(Context context, TimePickerDialog timePickerDialog, int initialHour, int initialMinute, boolean is24HourMode) {
         rootView = inflate(getContext(), R.layout.grid_picker_layout, this);
         mController = timePickerDialog;
 
@@ -55,7 +55,7 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
         mRecyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
         int[] hours = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        mAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, hours, new GridAdapter.OnItemClickListener() {
+        mAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, hours, initialHour, new GridAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(View view, int position) {
