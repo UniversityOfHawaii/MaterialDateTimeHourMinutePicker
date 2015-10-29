@@ -59,6 +59,7 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
 
             @Override
             public void onItemClick(View view, int position) {
+                mController.tryVibrate();
                 showMessage("Item clicked...");
             }
         });
