@@ -54,28 +54,13 @@ public class TimePickerDialog extends DialogFragment implements
     private static final String TAG = "TimePickerDialog";
 
     private static final String KEY_HOUR_OF_DAY = "hour_of_day";
-    private static final String KEY_MINUTE = "minute";
     private static final String KEY_IS_24_HOUR_VIEW = "is_24_hour_view";
-    private static final String KEY_TITLE = "dialog_title";
-    private static final String KEY_CURRENT_ITEM_SHOWING = "current_item_showing";
-    private static final String KEY_IN_KB_MODE = "in_kb_mode";
     private static final String KEY_TYPED_TIMES = "typed_times";
-    private static final String KEY_DARK_THEME = "dark_theme";
-    private static final String KEY_ACCENT = "accent";
-    private static final String KEY_VIBRATE = "vibrate";
-    private static final String KEY_DISMISS = "dismiss";
 
-    public static final int HOUR_INDEX = 0;
-    public static final int MINUTE_INDEX = 1;
     // NOT a real index for the purpose of what's showing.
     public static final int AMPM_INDEX = 2;
-    // Also NOT a real index, just used for keyboard mode.
-    public static final int ENABLE_PICKER_INDEX = 3;
     public static final int AM = 0;
     public static final int PM = 1;
-
-    // Delay before starting the pulse animation, in ms.
-    private static final int PULSE_ANIMATOR_DELAY = 300;
 
     private OnTimeSetListener mCallback;
     private DialogInterface.OnCancelListener mOnCancelListener;

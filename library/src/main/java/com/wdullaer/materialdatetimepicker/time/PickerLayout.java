@@ -9,13 +9,13 @@ import android.widget.FrameLayout;
 
 public abstract class PickerLayout extends FrameLayout {
 
-    protected static final int ENABLE_PICKER_INDEX = TimePickerDialog.ENABLE_PICKER_INDEX;
+    protected static final int ENABLE_PICKER_INDEX = OnValueSelectedListener.ENABLE_PICKER_INDEX;
     private static final String TAG = "PickerLayout";
 
     protected static final int PM = TimePickerDialog.PM;
     protected static final int AM = TimePickerDialog.AM;
-    protected static final int HOUR_INDEX = TimePickerDialog.HOUR_INDEX;
-    protected static final int MINUTE_INDEX = TimePickerDialog.MINUTE_INDEX;
+    protected static final int HOUR_INDEX = OnValueSelectedListener.HOUR_INDEX;
+    protected static final int MINUTE_INDEX = OnValueSelectedListener.MINUTE_INDEX;
     protected static final int AMPM_INDEX = TimePickerDialog.AMPM_INDEX;
     protected final int TAP_TIMEOUT;
     protected int mCurrentHoursOfDay;
@@ -123,6 +123,21 @@ public abstract class PickerLayout extends FrameLayout {
     public abstract boolean trySettingInputEnabled(boolean inputEnabled);
 
     public interface OnValueSelectedListener {
+        String KEY_MINUTE = "minute";
+        String KEY_TITLE = "dialog_title";
+        String KEY_CURRENT_ITEM_SHOWING = "current_item_showing";
+        String KEY_IN_KB_MODE = "in_kb_mode";
+        String KEY_DARK_THEME = "dark_theme";
+        String KEY_ACCENT = "accent";
+        String KEY_VIBRATE = "vibrate";
+        String KEY_DISMISS = "dismiss";
+        int HOUR_INDEX = 0;
+        int MINUTE_INDEX = 1;
+        // Also NOT a real index, just used for keyboard mode.
+        int ENABLE_PICKER_INDEX = 3;
+        // Delay before starting the pulse animation, in ms.
+        int PULSE_ANIMATOR_DELAY = 300;
+
         void onValueSelected(int pickerIndex, int newValue, boolean autoAdvance);
     }
 }
