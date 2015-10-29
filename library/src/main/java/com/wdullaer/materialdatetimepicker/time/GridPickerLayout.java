@@ -54,13 +54,15 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
-        int[] hours = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        final int[] hours = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         mAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, hours, initialHour, new GridAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(View view, int position) {
                 mController.tryVibrate();
-                showMessage("Item clicked...");
+                int value = hours[position];
+                setValueForItem(getCurrentItemShowing(), value);
+                mListener.onValueSelected(getCurrentItemShowing(), value, true);
             }
         });
         mRecyclerView.setAdapter(mAdapter);
@@ -79,12 +81,5 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return false;
-    }
-
-    private void showMessage(String message) {
-        if (TextUtils.isEmpty(message))
-            return;
-
-        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
     }
 }
