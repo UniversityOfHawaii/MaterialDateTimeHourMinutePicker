@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.HourMinutePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.PickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements
     TimePickerDialog.OnTimeSetListener,
     DatePickerDialog.OnDateSetListener
 {
+    private TextView hourMinuteTextview;
     private TextView timeTextView;
     private TextView dateTextView;
     private CheckBox mode24Hours;
@@ -40,8 +42,10 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         // Find our View instances
+        hourMinuteTextview = (TextView)findViewById(R.id.hour_minute_textview);
         timeTextView = (TextView)findViewById(R.id.time_textview);
         dateTextView = (TextView)findViewById(R.id.date_textview);
+        Button hourMinuteButton = (Button)findViewById(R.id.hour_minute_button);
         Button timeButton = (Button)findViewById(R.id.time_button);
         Button dateButton = (Button)findViewById(R.id.date_button);
         mode24Hours = (CheckBox)findViewById(R.id.mode_24_hours);
@@ -55,6 +59,36 @@ public class MainActivity extends AppCompatActivity implements
         dismissDate = (CheckBox) findViewById(R.id.dismiss_date);
         titleTime = (CheckBox) findViewById(R.id.title_time);
         showYearFirst = (CheckBox) findViewById(R.id.show_year_first);
+
+        // Show a HourMinutePicker when the hourMinuteButton is clicked
+        hourMinuteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar now = Calendar.getInstance();
+                HourMinutePickerDialog hmpd = HourMinutePickerDialog.newInstance(
+                        MainActivity.this,
+                        now.get(Calendar.HOUR_OF_DAY),
+                        now.get(Calendar.MINUTE),
+                        mode24Hours.isChecked()
+                );
+                hmpd.setThemeDark(modeDarkTime.isChecked());
+                hmpd.vibrate(vibrateTime.isChecked());
+                hmpd.dismissOnPause(dismissTime.isChecked());
+                if (modeCustomAccentTime.isChecked()) {
+                    hmpd.setAccentColor(Color.parseColor("#9C27B0"));
+                }
+                if (titleTime.isChecked()) {
+                    hmpd.setTitle("HourMinutePicker Title");
+                }
+                hmpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        Log.d("HourMinutePicker", "Dialog was cancelled");
+                    }
+                });
+                hmpd.show(getFragmentManager(), "HourMinutepickerdialog");
+            }
+        });
 
         // Show a timepicker when the timeButton is clicked
         timeButton.setOnClickListener(new View.OnClickListener() {

@@ -1,29 +1,48 @@
 package com.wdullaer.materialdatetimepicker.time;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
 public abstract class PickerLayout extends FrameLayout {
 
+    protected static final int ENABLE_PICKER_INDEX = TimePickerDialog.ENABLE_PICKER_INDEX;
     private static final String TAG = "PickerLayout";
 
-    protected static final int AM = TimePickerDialog.AM;
     protected static final int PM = TimePickerDialog.PM;
+    protected static final int AM = TimePickerDialog.AM;
     protected static final int HOUR_INDEX = TimePickerDialog.HOUR_INDEX;
     protected static final int MINUTE_INDEX = TimePickerDialog.MINUTE_INDEX;
     protected static final int AMPM_INDEX = TimePickerDialog.AMPM_INDEX;
+    protected final int TAP_TIMEOUT;
     protected int mCurrentHoursOfDay;
     protected int mCurrentMinutes;
     protected boolean mIs24HourMode;
     protected int mCurrentItemShowing;
+    protected boolean mInputEnabled;
+    protected float mDownX;
+    protected float mDownY;
+    protected int mLastValueSelected;
+    protected boolean mDoingMove;
+    protected boolean mDoingTouch;
+    protected TimePickerController mController;
+    protected Handler mHandler = new Handler();
+    protected OnValueSelectedListener mListener;
 
     public PickerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mInputEnabled = true;
+        mLastValueSelected = -1;
+        mDoingMove = false;
+        TAP_TIMEOUT = ViewConfiguration.getTapTimeout();
     }
 
-    public abstract void setOnValueSelectedListener(OnValueSelectedListener listener);
+    public void setOnValueSelectedListener(OnValueSelectedListener listener) {
+        mListener = listener;
+    }
 
     public abstract void initialize(Context context, TimePickerDialog timePickerDialog, int initialHoursOfDay, int initialMinutes, boolean is24HourMode);
 

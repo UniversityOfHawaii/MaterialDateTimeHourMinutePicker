@@ -50,4 +50,7 @@
         <item name="android:textColor">@color/mdtp_button_color</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
+    <style name="mtp_NumberPicker.TextAppearance.Material.Display4" parent="TextAppearance.AppCompat.Headline">
+    </style>
 </resources>

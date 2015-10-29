@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Material DateTimePicker</string>
-    <string name="title_activity_main">DateTimePicker Example</string>
+    <string name="app_name">Material DateTimeHourMinutePicker</string>
+    <string name="title_activity_main">DateTimeHourMinutePicker Example</string>
+    <string name="selected_hour_minute">The time amount you picked will be shown here.</string>
     <string name="selected_time">The time you picked will be shown here.</string>
     <string name="selected_date">The date you picked will be shown here.</string>
+    <string name="pick_hour_minute">Pick Time Amount</string>
     <string name="pick_time">Pick Time</string>
     <string name="pick_date">Pick Date</string>
     <string name="mode_24_hours">Use 24 hour mode</string>

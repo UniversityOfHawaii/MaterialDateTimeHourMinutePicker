@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
@@ -50,17 +49,11 @@ public class RadialPickerLayout extends PickerLayout implements OnTouchListener 
     private static final String TAG = "RadialPickerLayout";
 
     private final int TOUCH_SLOP;
-    private final int TAP_TIMEOUT;
 
     private static final int VISIBLE_DEGREES_STEP_SIZE = 30;
     private static final int HOUR_VALUE_TO_DEGREES_STEP_SIZE = VISIBLE_DEGREES_STEP_SIZE;
     private static final int MINUTE_VALUE_TO_DEGREES_STEP_SIZE = 6;
-    private static final int ENABLE_PICKER_INDEX = TimePickerDialog.ENABLE_PICKER_INDEX;
 
-    private int mLastValueSelected;
-
-    private TimePickerController mController;
-    private OnValueSelectedListener mListener;
     private boolean mTimeInitialized;
 
     private CircleView mCircleView;
@@ -72,17 +65,11 @@ public class RadialPickerLayout extends PickerLayout implements OnTouchListener 
     private View mGrayBox;
 
     private int[] mSnapPrefer30sMap;
-    private boolean mInputEnabled;
     private int mIsTouchingAmOrPm = -1;
-    private boolean mDoingMove;
-    private boolean mDoingTouch;
     private int mDownDegrees;
-    private float mDownX;
-    private float mDownY;
     private AccessibilityManager mAccessibilityManager;
 
     private AnimatorSet mTransition;
-    private Handler mHandler = new Handler();
 
     public RadialPickerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -90,8 +77,6 @@ public class RadialPickerLayout extends PickerLayout implements OnTouchListener 
         setOnTouchListener(this);
         ViewConfiguration vc = ViewConfiguration.get(context);
         TOUCH_SLOP = vc.getScaledTouchSlop();
-        TAP_TIMEOUT = ViewConfiguration.getTapTimeout();
-        mDoingMove = false;
 
         mCircleView = new CircleView(context);
         addView(mCircleView);
@@ -112,10 +97,6 @@ public class RadialPickerLayout extends PickerLayout implements OnTouchListener 
         // Prepare mapping to snap touchable degrees to selectable degrees.
         preparePrefer30sMap();
 
-        mLastValueSelected = -1;
-
-        mInputEnabled = true;
-
         mGrayBox = new View(context);
         mGrayBox.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -131,24 +112,20 @@ public class RadialPickerLayout extends PickerLayout implements OnTouchListener 
     /**
      * Measure the view to end up as a square, based on the minimum of the height and width.
      */
+
     /**
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int measuredHeight = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int minDimension = Math.min(measuredWidth, measuredHeight);
+     @Override
+     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+     int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
+     int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+     int measuredHeight = MeasureSpec.getSize(heightMeasureSpec);
+     int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+     int minDimension = Math.min(measuredWidth, measuredHeight);
 
-        super.onMeasure(MeasureSpec.makeMeasureSpec(minDimension, widthMode),
-                MeasureSpec.makeMeasureSpec(minDimension, heightMode));
-    }
-    **/
-
-    @Override
-    public void setOnValueSelectedListener(OnValueSelectedListener listener) {
-        mListener = listener;
-    }
+     super.onMeasure(MeasureSpec.makeMeasureSpec(minDimension, widthMode),
+     MeasureSpec.makeMeasureSpec(minDimension, heightMode));
+     }
+     **/
 
     /**
      * Initialize the Layout with starting values.

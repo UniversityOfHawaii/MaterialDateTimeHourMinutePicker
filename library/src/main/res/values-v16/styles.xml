@@ -27,4 +27,8 @@
     <style name="mdtp_day_of_week_label_condensed">
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
+
+    <style name="mtp_NumberPicker.TextAppearance.Material.Display4" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
 </resources>

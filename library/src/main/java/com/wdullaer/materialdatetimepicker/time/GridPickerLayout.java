@@ -1,66 +1,68 @@
 package com.wdullaer.materialdatetimepicker.time;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 
 import com.wdullaer.materialdatetimepicker.R;
+import com.wdullaer.materialdatetimepicker.Utils;
 
-public class GridPickerLayout extends PickerLayout implements View.OnTouchListener {
+public class GridPickerLayout extends PickerLayout implements OnTouchListener {
+
+    private static final String TAG = "GridPickerLayout";
 
     private final Context context;
     private final AttributeSet attrs;
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
-    private CustomAdapter mAdapter;
+    private GridAdapter mAdapter;
+    private View rootView;
 
     public GridPickerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setOnTouchListener(this);
         this.context = context;
         this.attrs = attrs;
     }
 
     @Override
-    public void setOnValueSelectedListener(OnValueSelectedListener listener) {
-
-    }
-
-    @Override
     public void initialize(Context context, TimePickerDialog timePickerDialog, int initialHoursOfDay, int initialMinutes, boolean is24HourMode) {
-        inflate(getContext(), R.layout.grid_picker_layout, this);
+        rootView = inflate(getContext(), R.layout.grid_picker_layout, this);
+        mController = timePickerDialog;
+
+        //We have to calculate the darker pressed version of the accent color in code so
+        //we modify the colors here and give them the the GridAdapter to set on the state list
+        //for each button.
+        int accentColor = mController.getAccentColor();
+        int accentColorDarker = Utils.darkenColor(accentColor);
+
+        GradientDrawable selectedNumberDrawable = (GradientDrawable) ContextCompat.getDrawable(context, R.drawable.mdtp_number_button_selected);
+        selectedNumberDrawable.setColor(accentColor);
+
+        GradientDrawable pressedNumberDrawable = (GradientDrawable) ContextCompat.getDrawable(context, R.drawable.mdtp_number_button_pressed);
+        pressedNumberDrawable.setColor(accentColorDarker);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
-        //mLayoutManager = new GridLayoutManager(context, 3, LinearLayoutManager.VERTICAL, false);
-        //mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-
-        setRecyclerViewLayoutManager();
+        mRecyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
         int[] hours = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        mAdapter = new CustomAdapter(hours);
-        // Set CustomAdapter as the adapter for RecyclerView.
+        mAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, hours, new GridAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+                showMessage("Item clicked...");
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
-
-    }
-
-    public void setRecyclerViewLayoutManager() {
-        int scrollPosition = 0;
-
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
-        }
-
-        mRecyclerView.setLayoutManager(new GridLayoutManager(context, 3));
-        mRecyclerView.scrollToPosition(scrollPosition);
     }
 
     @Override
@@ -76,5 +78,12 @@ public class GridPickerLayout extends PickerLayout implements View.OnTouchListen
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return false;
+    }
+
+    private void showMessage(String message) {
+        if (TextUtils.isEmpty(message))
+            return;
+
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
     }
 }
