@@ -25,14 +25,19 @@ public class MainActivity extends AppCompatActivity implements
     private TextView timeTextView;
     private TextView dateTextView;
     private CheckBox mode24Hours;
+    private CheckBox modeDarkHourMinute;
     private CheckBox modeDarkTime;
     private CheckBox modeDarkDate;
+    private CheckBox modeCustomAccentHourMinute;
     private CheckBox modeCustomAccentTime;
     private CheckBox modeCustomAccentDate;
+    private CheckBox vibrateHourMinute;
     private CheckBox vibrateTime;
     private CheckBox vibrateDate;
+    private CheckBox dismissHourMinute;
     private CheckBox dismissTime;
     private CheckBox dismissDate;
+    private CheckBox titleHourMinute;
     private CheckBox titleTime;
     private CheckBox showYearFirst;
 
@@ -49,14 +54,19 @@ public class MainActivity extends AppCompatActivity implements
         Button timeButton = (Button)findViewById(R.id.time_button);
         Button dateButton = (Button)findViewById(R.id.date_button);
         mode24Hours = (CheckBox)findViewById(R.id.mode_24_hours);
+        modeDarkHourMinute = (CheckBox)findViewById(R.id.mode_dark_time_hour_minute);
         modeDarkTime = (CheckBox)findViewById(R.id.mode_dark_time);
         modeDarkDate = (CheckBox)findViewById(R.id.mode_dark_date);
+        modeCustomAccentHourMinute = (CheckBox) findViewById(R.id.mode_custom_accent_hour_minute);
         modeCustomAccentTime = (CheckBox) findViewById(R.id.mode_custom_accent_time);
         modeCustomAccentDate = (CheckBox) findViewById(R.id.mode_custom_accent_date);
+        vibrateHourMinute = (CheckBox) findViewById(R.id.vibrate_hour_minute);
         vibrateTime = (CheckBox) findViewById(R.id.vibrate_time);
         vibrateDate = (CheckBox) findViewById(R.id.vibrate_date);
+        dismissHourMinute = (CheckBox) findViewById(R.id.dismiss_hour_minute);
         dismissTime = (CheckBox) findViewById(R.id.dismiss_time);
         dismissDate = (CheckBox) findViewById(R.id.dismiss_date);
+        titleHourMinute = (CheckBox) findViewById(R.id.title_hour_minute);
         titleTime = (CheckBox) findViewById(R.id.title_time);
         showYearFirst = (CheckBox) findViewById(R.id.show_year_first);
 
@@ -68,16 +78,15 @@ public class MainActivity extends AppCompatActivity implements
                 HourMinutePickerDialog hmpd = HourMinutePickerDialog.newInstance(
                         MainActivity.this,
                         now.get(Calendar.HOUR_OF_DAY),
-                        now.get(Calendar.MINUTE),
-                        mode24Hours.isChecked()
+                        now.get(Calendar.MINUTE)
                 );
-                hmpd.setThemeDark(modeDarkTime.isChecked());
-                hmpd.vibrate(vibrateTime.isChecked());
-                hmpd.dismissOnPause(dismissTime.isChecked());
-                if (modeCustomAccentTime.isChecked()) {
+                hmpd.setThemeDark(modeDarkHourMinute.isChecked());
+                hmpd.vibrate(vibrateHourMinute.isChecked());
+                hmpd.dismissOnPause(dismissHourMinute.isChecked());
+                if (modeCustomAccentHourMinute.isChecked()) {
                     hmpd.setAccentColor(Color.parseColor("#9C27B0"));
                 }
-                if (titleTime.isChecked()) {
+                if (titleHourMinute.isChecked()) {
                     hmpd.setTitle("HourMinutePicker Title");
                 }
                 hmpd.setOnCancelListener(new DialogInterface.OnCancelListener() {

@@ -26,12 +26,6 @@
             android:text="@string/pick_hour_minute"/>
 
         <CheckBox
-            android:id="@+id/mode_24_hours_hour_minute"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mode_24_hours" />
-
-        <CheckBox
             android:id="@+id/mode_dark_time_hour_minute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

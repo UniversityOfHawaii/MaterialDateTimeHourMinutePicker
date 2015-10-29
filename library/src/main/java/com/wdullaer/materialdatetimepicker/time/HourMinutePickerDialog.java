@@ -5,9 +5,9 @@ import com.wdullaer.materialdatetimepicker.R;
 public class HourMinutePickerDialog extends TimePickerDialog {
 
     public static HourMinutePickerDialog newInstance(OnTimeSetListener callback,
-                                                     int hourOfDay, int minute, boolean is24HourMode) {
+                                                     int hourOfDay, int minute) {
         HourMinutePickerDialog ret = new HourMinutePickerDialog();
-        ret.initialize(callback, hourOfDay, minute, is24HourMode);
+        ret.initialize(callback, hourOfDay, minute, false);
         return ret;
     }
 
