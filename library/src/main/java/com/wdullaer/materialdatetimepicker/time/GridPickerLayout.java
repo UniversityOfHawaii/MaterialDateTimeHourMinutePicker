@@ -1,14 +1,12 @@
 package com.wdullaer.materialdatetimepicker.time;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -23,7 +21,8 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
     private final Context context;
     private final AttributeSet attrs;
     private RecyclerView mRecyclerView;
-    private GridAdapter mAdapter;
+    private GridAdapter mHourAdapter;
+    private GridAdapter mMinuteAdapter;
     private View rootView;
 
     public GridPickerLayout(Context context, AttributeSet attrs) {
@@ -50,12 +49,12 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
         GradientDrawable pressedNumberDrawable = (GradientDrawable) ContextCompat.getDrawable(context, R.drawable.mdtp_number_button_pressed);
         pressedNumberDrawable.setColor(accentColorDarker);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
         final int[] hours = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        mAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, hours, initialHour, new GridAdapter.OnItemClickListener() {
+        mHourAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, hours, initialHour, new GridAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(View view, int position) {
@@ -65,12 +64,31 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
                 mListener.onValueSelected(getCurrentItemShowing(), value, true);
             }
         });
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mHourAdapter);
+
+
+        final int[] minutes = {0, 15, 30, 45};
+        mMinuteAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, minutes, initialMinute, new GridAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+                mController.tryVibrate();
+                int value = minutes[position];
+                setValueForItem(getCurrentItemShowing(), value);
+                mListener.onValueSelected(getCurrentItemShowing(), value, true);
+            }
+        });
+
+        // Initialize the currently-selected hour and minute.
+        setValueForItem(HOUR_INDEX, initialHour);
+        setValueForItem(MINUTE_INDEX, initialMinute);
+
+        mTimeInitialized = true;
     }
 
     @Override
     public void setTime(int hours, int minutes) {
-
+        throw new UnsupportedOperationException("Keyboard input mode is not supported.");
     }
 
     @Override
@@ -80,6 +98,28 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        //RecyclerView will handle everything.
         return false;
+    }
+
+    /**
+     * Set either minutes or hours as showing.
+     *
+     * @param animate True to animate the transition, false to show with no animation.
+     */
+    @Override
+    public void setCurrentItemShowing(int index, boolean animate) {
+        int lastIndex = getCurrentItemShowing();
+        super.setCurrentItemShowing(index, animate);
+
+        if (index != lastIndex) {
+            if (index == MINUTE_INDEX) {
+                mRecyclerView.setAdapter(mMinuteAdapter);
+                mMinuteAdapter.notifyDataSetChanged();
+            } else if (index == HOUR_INDEX) {
+                mRecyclerView.setAdapter(mHourAdapter);
+                mHourAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }

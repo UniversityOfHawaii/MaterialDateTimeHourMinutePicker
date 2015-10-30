@@ -15,6 +15,8 @@ import android.widget.Button;
 
 import com.wdullaer.materialdatetimepicker.R;
 
+import java.text.DecimalFormat;
+
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
@@ -60,11 +62,16 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         }
     }
 
-    public GridAdapter(Drawable pressedDrawable, Drawable selectedDrawable, int[] dataSet, int initialSelection, OnItemClickListener onItemClickListener) {
+    public GridAdapter(Drawable pressedDrawable, Drawable selectedDrawable, int[] dataSet, int initialValue, OnItemClickListener onItemClickListener) {
         this.pressedDrawable = pressedDrawable;
         this.selectedDrawable = selectedDrawable;
         this.mDataSet = dataSet;
-        this.selectedPosition = initialSelection;
+        for (int i = 0; i < dataSet.length; i++) {
+            int value = dataSet[i];
+            if(value == initialValue) {
+                this.selectedPosition = i;
+            }
+        }
         this.mOnItemClickListener = onItemClickListener;
     }
 
@@ -78,7 +85,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         Button item = (Button) viewHolder.getButton();
-        String text = String.valueOf(mDataSet[position]);
 
         item.setSelected(position == selectedPosition);
 
@@ -97,7 +103,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
             }
         });
 
-        item.setText(text);
+        int value = mDataSet[position];
+        String formattedValue = String.valueOf(value);
+        item.setText(formattedValue);
 
     }
 

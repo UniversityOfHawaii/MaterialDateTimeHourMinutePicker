@@ -1,5 +1,6 @@
 package com.wdullaer.materialdatetimepicker.time;
 
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -31,6 +32,8 @@ public abstract class PickerLayout extends FrameLayout {
     protected TimePickerController mController;
     protected Handler mHandler = new Handler();
     protected OnValueSelectedListener mListener;
+    protected AnimatorSet mTransition;
+    protected boolean mTimeInitialized;
 
     public PickerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,6 +41,7 @@ public abstract class PickerLayout extends FrameLayout {
         mLastValueSelected = -1;
         mDoingMove = false;
         TAP_TIMEOUT = ViewConfiguration.getTapTimeout();
+        mTimeInitialized = false;
     }
 
     public void setOnValueSelectedListener(OnValueSelectedListener listener) {

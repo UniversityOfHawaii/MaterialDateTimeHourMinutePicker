@@ -70,13 +70,13 @@ public class TimePickerDialog extends DialogFragment implements
 
     private Button mCancelButton;
     private Button mOkButton;
-    private TextView mHourView;
-    private TextView mHourSpaceView;
+    protected TextView mHourView;
+    protected TextView mHourSpaceView;
     private TextView mMinuteView;
     private TextView mMinuteSpaceView;
-    private TextView mAmPmTextView;
-    private View mAmPmHitspace;
-    private PickerLayout mTimePicker;
+    protected TextView mAmPmTextView;
+    protected View mAmPmHitspace;
+    protected PickerLayout mTimePicker;
 
     private int mSelectedColor;
     private int mUnselectedColor;
@@ -445,7 +445,7 @@ public class TimePickerDialog extends DialogFragment implements
         if(mVibrate) mHapticFeedbackController.tryVibrate();
     }
 
-    private void updateAmPmDisplay(int amOrPm) {
+    protected void updateAmPmDisplay(int amOrPm) {
         if (amOrPm == AM) {
             mAmPmTextView.setText(mAmText);
             Utils.tryAccessibilityAnnounce(mTimePicker, mAmText);
@@ -507,7 +507,7 @@ public class TimePickerDialog extends DialogFragment implements
         }
     }
 
-    private void setHour(int value, boolean announce) {
+    protected void setHour(int value, boolean announce) {
         String format;
         if (mIs24HourMode) {
             format = "%02d";

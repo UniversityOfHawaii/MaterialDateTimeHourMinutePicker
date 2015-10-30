@@ -54,8 +54,6 @@ public class RadialPickerLayout extends PickerLayout implements OnTouchListener 
     private static final int HOUR_VALUE_TO_DEGREES_STEP_SIZE = VISIBLE_DEGREES_STEP_SIZE;
     private static final int MINUTE_VALUE_TO_DEGREES_STEP_SIZE = 6;
 
-    private boolean mTimeInitialized;
-
     private CircleView mCircleView;
     private AmPmCirclesView mAmPmCirclesView;
     private RadialTextsView mHourRadialTextsView;
@@ -68,8 +66,6 @@ public class RadialPickerLayout extends PickerLayout implements OnTouchListener 
     private int mIsTouchingAmOrPm = -1;
     private int mDownDegrees;
     private AccessibilityManager mAccessibilityManager;
-
-    private AnimatorSet mTransition;
 
     public RadialPickerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -106,7 +102,6 @@ public class RadialPickerLayout extends PickerLayout implements OnTouchListener 
 
         mAccessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
 
-        mTimeInitialized = false;
     }
 
     /**

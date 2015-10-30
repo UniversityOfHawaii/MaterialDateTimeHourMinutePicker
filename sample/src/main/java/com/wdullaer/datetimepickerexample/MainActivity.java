@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
                 int initialHour = 4;
-                int initialMinutes = 0;
+                int initialMinutes = 30;
                 HourMinutePickerDialog hmpd = HourMinutePickerDialog.newInstance(
                         MainActivity.this,
                         initialHour,
