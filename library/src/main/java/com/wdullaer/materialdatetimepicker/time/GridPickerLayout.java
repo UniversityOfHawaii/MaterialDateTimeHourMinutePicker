@@ -1,12 +1,12 @@
 package com.wdullaer.materialdatetimepicker.time;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -43,6 +43,15 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
         int accentColor = mController.getAccentColor();
         int accentColorDarker = Utils.darkenColor(accentColor);
 
+        ColorStateList textColor = ContextCompat.getColorStateList(context, R.color.mdtp_number_button_color_selector);
+
+        GradientDrawable defaultNumberDrawable = null;
+        if(timePickerDialog.isThemeDark()) {
+            defaultNumberDrawable = (GradientDrawable) ContextCompat.getDrawable(context, R.drawable.mdtp_number_button_default);
+            defaultNumberDrawable.setColor(getResources().getColor(R.color.mdtp_circle_background_dark_theme));
+            textColor = ContextCompat.getColorStateList(context, R.color.mdtp_number_button_color_selector_dark);
+        }
+
         GradientDrawable selectedNumberDrawable = (GradientDrawable) ContextCompat.getDrawable(context, R.drawable.mdtp_number_button_selected);
         selectedNumberDrawable.setColor(accentColor);
 
@@ -54,7 +63,7 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
         mRecyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
         final int[] hours = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        mHourAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, hours, initialHour, new GridAdapter.OnItemClickListener() {
+        mHourAdapter = new GridAdapter(defaultNumberDrawable, pressedNumberDrawable, selectedNumberDrawable, textColor, hours, initialHour, new GridAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(View view, int position) {
@@ -68,7 +77,7 @@ public class GridPickerLayout extends PickerLayout implements OnTouchListener {
 
 
         final int[] minutes = {0, 15, 30, 45};
-        mMinuteAdapter = new GridAdapter(pressedNumberDrawable, selectedNumberDrawable, minutes, initialMinute, new GridAdapter.OnItemClickListener() {
+        mMinuteAdapter = new GridAdapter(defaultNumberDrawable, pressedNumberDrawable, selectedNumberDrawable, textColor, minutes, initialMinute, new GridAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(View view, int position) {
