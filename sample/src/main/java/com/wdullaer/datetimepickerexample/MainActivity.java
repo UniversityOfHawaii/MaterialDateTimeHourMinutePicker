@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements
         hourMinuteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar now = Calendar.getInstance();
                 int initialHour = 4;
                 int initialMinutes = 30;
                 HourMinutePickerDialog hmpd = HourMinutePickerDialog.newInstance(
